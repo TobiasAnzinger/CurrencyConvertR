@@ -19,7 +19,7 @@ library(httr)
 .cache_env <- new.env()
 
 
-.get_conversion_rates <- function(date) {
+.update_conversion_rates <- function(date) {
   url <- paste("https://api.exchangerate.host/", date, sep = "")
   response <- GET(url)
   if (status_code(response) == 200) {
@@ -34,39 +34,34 @@ library(httr)
 
 .get_conversion_rate <- function(from, to, date) {
   if(from == "EUR") {
-    return(cache_env[[date]][["rates"]][[to]])
+    return(.cache_env[[date]][["rates"]][[to]])
   } else {
-    # convert first currency to EUR
-
-    # convert EUR to second currency
-
-    return(cache_env[[date]][["rates"]][[to]])
+    return(1 / .cache_env[[date]][["rates"]][[from]] * .cache_env[[date]][["rates"]][[to]])
   }
 }
 
 
 convert_currency <- function(ammount = 1, from = "EUR", to = "USD", date = Sys.Date()) {
   tryCatch({date <- format(date, "%Y-%m-%d")}, error = function(e){})
-  if (exists(date, envir = cache_env)){
-    parsed_data <- get(date, envir = cache_env)
+  if (exists(date, envir = .cache_env)){
+    parsed_data <- get(date, envir = .cache_env)
   } else {
-    parsed_data <- get_conversion_rates(date)
-    assign(date, parsed_data, envir = cache_env)
+    parsed_data <- .update_conversion_rates(date)
+    assign(date, parsed_data, envir = .cache_env)
   }
-  result <- get_conversion_rate(
+  result <- .get_conversion_rate(
     from = from,
     to = to,
     date = date
   )
-  #print(result)
-  return(result)
+  return(result * ammount)
 }
 
 convert_currency(ammount = 1, date = "2023-04-04")
 convert_currency(ammount = 1, date = "2023-05-06")
 convert_currency(ammount = 1, date = "2023-06-06")
-convert_currency(ammount = 1, to = "AED")
-
+convert_currency(ammount = 1, from = "CHF", to = "USD")
+convert_currency(ammount = 1, from = "CAD", to = "USD")
 
 
 
