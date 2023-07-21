@@ -5,6 +5,7 @@ library(dplyr)
 library(tidyr)
 library(purrr)
 
+
 #' Plot Historical Currency Data
 #'
 #' This function retrieves historical exchange rate data from exchangerate.host and plots it over the specified timeframe.
@@ -31,8 +32,6 @@ library(purrr)
 #' plot_historical_data(time_frame = "month", currency = "USD")
 #' plot_historical_data(time_frame = "year", currency = "USD", base_currency = "GBP")
 #' }
-
-
 plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
   url <- paste0('https://api.exchangerate.host/timeseries?start_date=', Sys.Date() - lubridate::years(1), '&end_date=', Sys.Date(), '&base=', base_currency)
   req <- httr::GET(url)
@@ -66,22 +65,18 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
         xlab("Date") +
         ylab("Value")+
         theme_minimal()
-    }
-
-    else if(time_frame == "year"){
+    } else if(time_frame == "year"){
       last_year <- df %>% filter(date >= Sys.Date() - years(1),currencyData == currency)
-
       ggplot(last_year, aes(x = date, y = value)) +
         geom_line() +
         ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
         xlab("Date") +
         ylab("Value") +
         theme_minimal()
-    }
-    else{
-      print('Please provide a correct time frame (month or year)')
+    } else {
+      stop('Please provide a correct time frame \"month\" or \"year\"')
     }
   } else {
-    print('Please provide a correct ISO Code for the currency inputs (e.g. USD)')
+    stop("One of the provided currency formats is not valid. Please use the ISO 4217 codes from the code colum here https://www.iban.com/currency-codes")
   }
 }
