@@ -48,9 +48,8 @@ library(httr)
   }
 }
 
-.currency_is_valid <- function(currencys, df) {
-  print(names(df))
-  if(all(currencys %in% names(df))){
+.currency_is_valid <- function(currencies, allowed_currencies) {
+  if(all(currencies %in% names(df))){
     return(TRUE)
   } else {
     stop("one of the provided currency formats is not valid. Please use the ISO 4217 codes from the Code colum here https://www.iban.com/currency-codes")
