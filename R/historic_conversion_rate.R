@@ -33,6 +33,7 @@ library(tidyr)
 plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
   url <- paste0('https://api.exchangerate.host/timeseries?start_date=', Sys.Date() - lubridate::years(1), '&end_date=', Sys.Date(), '&base=', base_currency)
   req <- httr::GET(url)
+
   if (req$status_code != 200){
     print("API Request failed")
     return(NULL)
@@ -44,33 +45,34 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
 
   df <- hist_data %>%
     enframe(name = "date", value = "currencies") %>%
-    mutate(date = as.Date(date)) %>%
-    unnest_wider(currencies) %>%
-    pivot_longer(cols = -date, names_to = "currencyData", values_to = "value")
+    dplyr::mutate(date = as.Date(date)) %>%
+    tidyr::unnest_wider(currencies) %>%
+    tidyr::pivot_longer(cols = -date, names_to = "currencyData", values_to = "value")
 
-  currency_list <- df %>% select(currencyData) %>% distinct()
+  currency_list <- df %>% dplyr::select(currencyData) %>% deplyr::distinct()
 
   if(any(currency_list == base_currency) && any(currency_list == currency)) {
+
     if(time_frame == "month") {
+      last_30_days <- df %>% filter(date >= Sys.Date() - days(30),currencyData == currency)
 
-      last_30_days <- df %>%
-        filter(date >= Sys.Date() - days(30),
-               currencyData == currency)
-
-      ggplot(last_30_days, aes(x = date, y = value)) +
+      ggplot2::ggplot(last_30_days, aes(x = date, y = value)) +
         geom_line() +
         ggtitle(paste0(currency, " value over last 30 days (compared to ", base_currency, ")")) +
         xlab("Date") +
         ylab("Value")+
         theme_minimal()
+
     } else if(time_frame == "year"){
-      last_year <- df %>% filter(date >= Sys.Date() - years(1),currencyData == currency)
-      ggplot(last_year, aes(x = date, y = value)) +
+
+      last_year <- df %>% filter(date >= Sys.Date() - years(1), currencyData == currency)
+      ggplot2::ggplot(last_year, aes(x = date, y = value)) +
         geom_line() +
         ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
         xlab("Date") +
         ylab("Value") +
         theme_minimal()
+
     } else {
       stop('Please provide a correct time frame \"month\" or \"year\"')
     }
