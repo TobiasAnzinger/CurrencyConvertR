@@ -1,9 +1,7 @@
 library(httr)
 library(lubridate)
 library(ggplot2)
-library(dplyr)
 library(tidyr)
-library(purrr)
 
 
 #' Plot Historical Currency Data
