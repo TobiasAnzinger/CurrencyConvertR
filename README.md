@@ -22,9 +22,9 @@ The main function in this package is convert_currency(). When run without any pa
 convert_currency()
 ```
 
-You can customize the conversion by specifying four parameters: amount, from, to, and date. Here's an example of converting 1 EUR to USD using today's exchange rate:
+You can customize the conversion by specifying four parameters: amount, from, to, and date. Here's an example of converting 1 EUR to USD using exchange rate for the 2023-07-21:
 ```
-convert_currency(amount = 1, from = "EUR", to = "USD", date = Sys.Date())
+convert_currency(amount = 1, from = "EUR", to = "USD", date = "2023-07-21")
 ```
 
 ## Historical Currency Data Plotting
