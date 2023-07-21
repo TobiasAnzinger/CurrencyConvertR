@@ -19,7 +19,7 @@ library(httr)
 .update_conversion_rates <- function(date) {
   url <- paste("https://api.exchangerate.host/", date, sep = "")
   response <- httr::GET(url)
-  if (status_code(response) == 200) {
+  if (httr::status_code(response) == 200) {
     json_data <- httr::content(response, "text", encoding = "UTF-8")
     parsed_data <- jsonlite::fromJSON(json_data)
     return(parsed_data)
