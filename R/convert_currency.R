@@ -49,7 +49,7 @@ library(httr)
 }
 
 .currency_is_valid <- function(currencies, allowed_currencies) {
-  if(all(currencies %in% names(df))){
+  if(all(currencies %in% names(allowed_currencies))){
     return(TRUE)
   } else {
     stop("one of the provided currency formats is not valid. Please use the ISO 4217 codes from the Code colum here https://www.iban.com/currency-codes")
