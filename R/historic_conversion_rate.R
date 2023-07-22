@@ -48,14 +48,14 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
     tibble::enframe(name = "date", value = "currencies") %>%
     dplyr::mutate(date = as.Date(date)) %>%
     tidyr::unnest_wider(currencies) %>%
-    tidyr::pivot_longer(cols = -date, names_to = "currencyData", values_to = "value")
+    tidyr::pivot_longer(cols = -date, names_to = "currency_data", values_to = "value")
 
-  currency_list <- df %>% dplyr::select(currencyData) %>% dplyr::distinct()
+  currency_list <- df %>% dplyr::select(currency_data) %>% dplyr::distinct()
 
   if(any(currency_list == base_currency) && any(currency_list == currency)) {
 
     if(time_frame == "month") {
-      last_30_days <- df %>% filter(date >= Sys.Date() - days(30), currencyData == currency)
+      last_30_days <- df %>% filter(date >= Sys.Date() - days(30), currency_data == currency)
 
       ggplot2::ggplot(last_30_days, aes(x = date, y = value)) +
         geom_line() +
@@ -66,7 +66,7 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
 
     } else if(time_frame == "year"){
 
-      last_year <- df %>% filter(date >= Sys.Date() - years(1), currencyData == currency)
+      last_year <- df %>% filter(date >= Sys.Date() - years(1), currency_data == currency)
       ggplot2::ggplot(last_year, aes(x = date, y = value)) +
         geom_line() +
         ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
@@ -81,3 +81,4 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
     stop("One of the provided currency formats is not valid. Please use the ISO 4217 codes from the code colum here https://www.iban.com/currency-codes")
   }
 }
+
