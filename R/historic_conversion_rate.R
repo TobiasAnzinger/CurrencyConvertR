@@ -1,9 +1,8 @@
 library(httr)
 library(lubridate)
-library(ggplot2)
-library(tidyr)
+library(tidyverse)
 
-
+df <- NULL
 
 #' Plot Historical Currency Data
 #'
@@ -82,3 +81,4 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
   }
 }
 
+plot_historical_data("year", "USD", base_currency = "EUR")
