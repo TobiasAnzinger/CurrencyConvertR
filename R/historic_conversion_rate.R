@@ -2,7 +2,6 @@ library(httr)
 library(lubridate)
 library(tidyverse)
 
-df <- NULL
 
 #' Plot Historical Currency Data
 #'
@@ -30,7 +29,8 @@ df <- NULL
 #' plot_historical_data(time_frame = "month", currency = "USD")
 #' plot_historical_data(time_frame = "year", currency = "USD", base_currency = "GBP")
 #' }
-plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
+
+get_historical_currency_data <- function(base_currency) {
   url <- paste0('https://api.exchangerate.host/timeseries?start_date=', Sys.Date() - lubridate::years(1), '&end_date=', Sys.Date(), '&base=', base_currency)
   req <- httr::GET(url)
 
@@ -48,6 +48,17 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
     dplyr::mutate(date = as.Date(date)) %>%
     tidyr::unnest_wider(currencies) %>%
     tidyr::pivot_longer(cols = -date, names_to = "currency_data", values_to = "value")
+
+  return(df)
+}
+
+
+
+
+
+plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
+
+  df <- get_historical_currency_data(base_currency)
 
   currency_list <- df %>% dplyr::select(currency_data) %>% dplyr::distinct()
 
@@ -80,5 +91,3 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
     stop("One of the provided currency formats is not valid. Please use the ISO 4217 codes from the code colum here https://www.iban.com/currency-codes")
   }
 }
-
-plot_historical_data("year", "USD", base_currency = "EUR")
