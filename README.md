@@ -44,3 +44,8 @@ plot_historical_currency_data(time_frame = "month", currency = "USD", base_curre
 
 # Support
 For questions or issues, please open an issue on the GitHub repository.
+
+# License
+This project is licensed under the terms of the MIT license.
+
+
