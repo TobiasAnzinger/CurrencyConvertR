@@ -79,22 +79,22 @@ plot_historical_currency_data <- function(time_frame, currency, base_currency = 
     if(time_frame == "month") {
       last_30_days <- df %>% dplyr::filter(date >= Sys.Date() - lubridate::days(30), currency_data == currency)
 
-      ggplot2::ggplot(last_30_days, aes(x = date, y = value)) +
-        geom_line() +
-        ggtitle(paste0(currency, " value over last 30 days (compared to ", base_currency, ")")) +
-        xlab("Date") +
-        ylab("Value")+
-        theme_minimal()
+      ggplot2::ggplot(last_30_days, ggplot2::aes(x = date, y = value)) +
+        ggplot2::geom_line() +
+        ggplot2::ggtitle(paste0(currency, " value over last 30 days (compared to ", base_currency, ")")) +
+        ggplot2::xlab("Date") +
+        ggplot2::ylab("Value")+
+        ggplot2::theme_minimal()
 
     } else if(time_frame == "year"){
 
       last_year <- df %>% dplyr::filter(date >= Sys.Date() - lubridate::years(1), currency_data == currency)
       ggplot2::ggplot(last_year, ggplot2::aes(x = date, y = value)) +
-        geom_line() +
-        ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
-        xlab("Date") +
-        ylab("Value") +
-        theme_minimal()
+        ggplot2::geom_line() +
+        ggplot2::ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
+        ggplot2::xlab("Date") +
+        ggplot2::ylab("Value") +
+        ggplot2::theme_minimal()
 
     } else {
       stop("Please provide a correct time frame \"month\" or \"year\"")
