@@ -89,7 +89,7 @@ plot_historical_currency_data <- function(time_frame, currency, base_currency = 
     } else if(time_frame == "year"){
 
       last_year <- df %>% dplyr::filter(date >= Sys.Date() - lubridate::years(1), currency_data == currency)
-      ggplot2::ggplot(last_year, aes(x = date, y = value)) +
+      ggplot2::ggplot(last_year, ggplot2::aes(x = date, y = value)) +
         geom_line() +
         ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
         xlab("Date") +
