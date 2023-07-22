@@ -4,6 +4,7 @@ library(ggplot2)
 library(tidyr)
 
 
+
 #' Plot Historical Currency Data
 #'
 #' This function retrieves historical exchange rate data from exchangerate.host and plots it over the specified timeframe.
@@ -44,17 +45,17 @@ plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
   hist_data <- hist_data$rates
 
   df <- hist_data %>%
-    enframe(name = "date", value = "currencies") %>%
+    tibble::enframe(name = "date", value = "currencies") %>%
     dplyr::mutate(date = as.Date(date)) %>%
     tidyr::unnest_wider(currencies) %>%
     tidyr::pivot_longer(cols = -date, names_to = "currencyData", values_to = "value")
 
-  currency_list <- df %>% dplyr::select(currencyData) %>% deplyr::distinct()
+  currency_list <- df %>% dplyr::select(currencyData) %>% dplyr::distinct()
 
   if(any(currency_list == base_currency) && any(currency_list == currency)) {
 
     if(time_frame == "month") {
-      last_30_days <- df %>% filter(date >= Sys.Date() - days(30),currencyData == currency)
+      last_30_days <- df %>% filter(date >= Sys.Date() - days(30), currencyData == currency)
 
       ggplot2::ggplot(last_30_days, aes(x = date, y = value)) +
         geom_line() +
