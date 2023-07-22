@@ -22,9 +22,16 @@ The main function in this package is convert_currency(). When run without any pa
 convert_currency()
 ```
 
-You can customize the conversion by specifying four parameters: amount, from, to, and date. Here's an example of converting 1 EUR to USD using exchange rate for the 2023-07-21:
+You can customize the conversion by specifying four parameters: amount, from, to, and date. Here's an example of converting 1 EUR to USD using the exchange rate for 2023-07-21:
 ```
 convert_currency(amount = 1, from = "EUR", to = "USD", date = "2023-07-21")
+```
+
+## Historical Currency Data Retrieval
+You can retrieve the historical currency data for a specified base currency using the get_historical_currency_data() function. The function retrieves data for the past year, based on the current system date. Here's an example:
+
+```
+get_historical_currency_data(base_currency = "USD")
 ```
 
 ## Historical Currency Data Plotting
