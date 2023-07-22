@@ -56,7 +56,7 @@ get_historical_currency_data <- function(base_currency) {
 
 
 
-plot_historical_data <- function(time_frame, currency, base_currency = "EUR") {
+plot_historical_currency_data <- function(time_frame, currency, base_currency = "EUR") {
 
   df <- get_historical_currency_data(base_currency)
 

@@ -48,6 +48,15 @@ library(httr)
   }
 }
 
+
+#' Currency is valid
+#'
+#' This internal function checks if the provided currencies are in a list of provided
+#' allowed_currencies. If not an exception is thrown.
+#'
+#' @param currencies currencys to check
+#' @param allowed_currencies allowed currencys
+#' .currency_is_valid(c("EUR", "USD"), c("EUR", "CAD", "USD"))
 .currency_is_valid <- function(currencies, allowed_currencies) {
   if(all(currencies %in% names(allowed_currencies))){
     return(TRUE)
