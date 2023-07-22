@@ -77,7 +77,7 @@ plot_historical_currency_data <- function(time_frame, currency, base_currency = 
   if(any(currency_list == base_currency) && any(currency_list == currency)) {
 
     if(time_frame == "month") {
-      last_30_days <- df %>% dplyr::filter(date >= Sys.Date() - days(30), currency_data == currency)
+      last_30_days <- df %>% dplyr::filter(date >= Sys.Date() - lubridate::days(30), currency_data == currency)
 
       ggplot2::ggplot(last_30_days, aes(x = date, y = value)) +
         geom_line() +
@@ -88,7 +88,7 @@ plot_historical_currency_data <- function(time_frame, currency, base_currency = 
 
     } else if(time_frame == "year"){
 
-      last_year <- df %>% dplyr::filter(date >= Sys.Date() - years(1), currency_data == currency)
+      last_year <- df %>% dplyr::filter(date >= Sys.Date() - lubridate::years(1), currency_data == currency)
       ggplot2::ggplot(last_year, aes(x = date, y = value)) +
         geom_line() +
         ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
