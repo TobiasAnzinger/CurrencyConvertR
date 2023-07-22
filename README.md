@@ -39,7 +39,7 @@ get_historical_currency_data(base_currency = "USD")
 The package also provides the plot_historical_data() function, which allows you to plot the value of a specified currency compared to a base currency over a specified time frame ("month" or "year").
 
 ```
-plot_historical_data(time_frame = "month", currency = "USD", base_currency = "EUR")
+plot_historical_currency_data(time_frame = "month", currency = "USD", base_currency = "EUR")
 ```
 
 # Support
