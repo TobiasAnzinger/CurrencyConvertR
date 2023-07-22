@@ -12,10 +12,17 @@ library(httr)
 #' future quick access and to avoid calling the api multible times with the same
 #' GET request.
 #'
+#' @import httr
+#' @import jsonlite
+#'
 #' @param date The date for which conversion rates are required.
+#'
 #' @return JSON object of conversion rates for the date. If request fails, NULL is returned and message is printed.
+#'
 #' @examples
+#' \dontrun{
 #' .update_conversion_rates('2023-07-21')
+#' }
 .update_conversion_rates <- function(date) {
   url <- paste("https://api.exchangerate.host/", date, sep = "")
   response <- httr::GET(url)
@@ -37,9 +44,14 @@ library(httr)
 #' @param from The currency to convert from.
 #' @param to The currency to convert to.
 #' @param date The date for which conversion rates are required.
+#'
 #' @return Conversion rate from 'from' currency to 'to' currency.
+#'
 #' @examples
+#' \dontrun{
 #' .get_conversion_rate('EUR', 'USD', '2023-07-21')
+#' .get_conversion_rate('CAD', 'CHF', '2023-05-07')
+#' }
 .get_conversion_rate <- function(from, to, date) {
   if(from == "EUR") {
     return(.cache_env[[date]][["rates"]][[to]])
@@ -56,7 +68,13 @@ library(httr)
 #'
 #' @param currencies currencys to check
 #' @param allowed_currencies allowed currencys
+#'
+#' @return TRUE if its valid else an error is thrown
+#'
+#' @examples
+#' \dontrun{
 #' .currency_is_valid(c("EUR", "USD"), c("EUR", "CAD", "USD"))
+#' }
 .currency_is_valid <- function(currencies, allowed_currencies) {
   if(all(currencies %in% names(allowed_currencies))){
     return(TRUE)
@@ -73,16 +91,22 @@ library(httr)
 #' It uses an environment to store conversion rates to avoid multiple requests for the same date.
 #' If the conversion rates for the date are not available in the environment, they are retrieved using .update_conversion_rates().
 #'
-#' The currency s should be
-#'
-#' @param ammount The amount to convert. Default is 1.
+#' @param amount The amount to convert. Default is 1.
 #' @param from The currency to convert from. Default is "EUR".
 #' @param to The currency to convert to. Default is "USD".
 #' @param date The date for which conversion rates are required. Default is the current date.
-#' @return Converted amount from 'from' currency to 'to' currency.
+#'
+#' @return Converted amount from 'from' currency to 'to' currency (numeric).
+#'
 #' @examples
-#' convert_currency(100, 'EUR', 'USD', '2023-07-21')
-convert_currency <- function(ammount = 1, from = "EUR", to = "USD", date = Sys.Date()) {
+#' \dontrun{
+#' convert_currency()
+#' convert_currency(to = 'CHF')
+#' convert_currency(amount = 100, from = 'USD', to = "CAD")
+#' convert_currency(amount = 123, from = 'EUR', to = 'USD', date = '2023-07-21')
+#' convert_currency(amount = 123, from = 'CHF', to = 'CAD', date = '2023-04-12')
+#' }
+convert_currency <- function(amount = 1, from = "EUR", to = "USD", date = Sys.Date()) {
   tryCatch({date <- format(date, "%Y-%m-%d")}, error = function(e){})
   if (exists(date, envir = .cache_env)){
     parsed_data <- get(date, envir = .cache_env)
@@ -97,5 +121,5 @@ convert_currency <- function(ammount = 1, from = "EUR", to = "USD", date = Sys.D
     to = to,
     date = date
   )
-  return(ammount * result)
+  return(amount * result)
 }
