@@ -42,6 +42,13 @@ The package also provides the plot_historical_data() function, which allows you 
 plot_historical_currency_data(time_frame = "month", currency = "USD", base_currency = "EUR")
 ```
 
+# Package limitations
+
+The data this package uses to calculate the conversion rates is from the free API exchangerate.host. This API has limitations! 
+* The data goes only back to 2000
+* For older dates there are only limited currencies
+* The conversion rates are only updated once a day (at 00:05 GMT)
+
 # Support
 For questions or issues, please open an issue on the GitHub repository.
 
