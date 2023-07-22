@@ -10,7 +10,7 @@ get_historical_currency_data(base_currency = "EUR")
 \item{base_currency}{A character string specifying the ISO code of the base currency for which to retrieve data. Default is "EUR".}
 }
 \value{
-Returns a tibble that contains exchange rate data for the specified base currency over the past year. The tibble includes a date column,
+Returns a data frame that contains exchange rate data for the specified base currency over the past year. The data frame includes a date column,
 a currency_data column that specifies the currency to which the base currency is compared, and a value column that gives the exchange rate.
 If the API request fails, the function will stop and print an error message.
 }

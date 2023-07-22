@@ -1,8 +1,3 @@
-library(httr)
-library(lubridate)
-library(tidyverse)
-
-
 #' Get Historical Currency Data
 #'
 #' This function retrieves historical exchange rate data for a specified base currency from exchangerate.host.
@@ -10,19 +5,16 @@ library(tidyverse)
 #'
 #' @param base_currency A character string specifying the ISO code of the base currency for which to retrieve data. Default is "EUR".
 #'
-#' @return Returns a tibble that contains exchange rate data for the specified base currency over the past year. The tibble includes a date column,
+#' @return Returns a data frame that contains exchange rate data for the specified base currency over the past year. The data frame includes a date column,
 #' a currency_data column that specifies the currency to which the base currency is compared, and a value column that gives the exchange rate.
 #' If the API request fails, the function will stop and print an error message.
 #'
 #' @import httr
 #' @import jsonlite
 #' @importFrom lubridate years
+#' @importFrom purrr map_dfr
 #' @importFrom dplyr mutate
-#' @importFrom tidyr unnest_wider pivot_longer
-#' @importFrom tibble enframe
-#' @importFrom purrr %>% set_names
 #' @importFrom magrittr %>%
-#' @importFrom rlang .data
 #'
 #' @examples
 #' \dontrun{
@@ -41,11 +33,8 @@ get_historical_currency_data <- function(base_currency = "EUR") {
   hist_data <- jsonlite::fromJSON(char)
   hist_data <- hist_data$rates
 
-  df <- hist_data %>%
-    tibble::enframe(name = "date", value = "currencies") %>%
-    dplyr::mutate(date = as.Date(date)) %>%
-    tidyr::unnest_wider(currencies) %>%
-    tidyr::pivot_longer(cols = -date, names_to = "currency_data", values_to = "value")
+  df <- purrr::map_dfr(hist_data, ~data.frame(currency_data = names(.x), value = unlist(.x)), .id = "date")
+  df$date <- as.Date(df$date)
 
   return(df)
 }
@@ -71,8 +60,6 @@ get_historical_currency_data <- function(base_currency = "EUR") {
 #' @importFrom dplyr filter select distinct
 #' @importFrom lubridate days years
 #' @importFrom magrittr %>%
-#' @importFrom rlang .data
-#' @importFrom utils stop
 #'
 #' @seealso \code{\link{get_historical_currency_data}} for the function used to retrieve the historical exchange rate data.
 #'
@@ -90,7 +77,7 @@ plot_historical_currency_data <- function(time_frame, currency, base_currency = 
   if(any(currency_list == base_currency) && any(currency_list == currency)) {
 
     if(time_frame == "month") {
-      last_30_days <- df %>% filter(date >= Sys.Date() - days(30), currency_data == currency)
+      last_30_days <- df %>% dplyr::filter(date >= Sys.Date() - days(30), currency_data == currency)
 
       ggplot2::ggplot(last_30_days, aes(x = date, y = value)) +
         geom_line() +
@@ -101,7 +88,7 @@ plot_historical_currency_data <- function(time_frame, currency, base_currency = 
 
     } else if(time_frame == "year"){
 
-      last_year <- df %>% filter(date >= Sys.Date() - years(1), currency_data == currency)
+      last_year <- df %>% dplyr::filter(date >= Sys.Date() - years(1), currency_data == currency)
       ggplot2::ggplot(last_year, aes(x = date, y = value)) +
         geom_line() +
         ggtitle(paste0(currency, " value over last year (compared to ", base_currency, ")")) +
