@@ -10,7 +10,8 @@ Description: CurrencyConvertR is an R package for performing currency
 Imports:
     httr,
     jsonlite,
-    lubridate
+    lubridate,
+    tidyverse
 License: MIT
 Encoding: UTF-8
 LazyData: true
