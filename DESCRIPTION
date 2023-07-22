@@ -3,7 +3,6 @@ Type: Package
 Title: CurrencyConvertR
 Version: 1.0.0
 Author: Oleg Tolochko, Tobias Anzinger
-Maintainer: tobiasanzinger98@gmail.com
 Description: CurrencyConvertR is an R package for performing currency
     conversions using current and historical conversion rates.
     This package leverages exchange rate data from 'exchangerate.host'.
