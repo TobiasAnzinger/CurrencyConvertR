@@ -19,5 +19,7 @@ future quick access and to avoid calling the api multible times with the same
 GET request.
 }
 \examples{
+\dontrun{
 .update_conversion_rates('2023-07-21')
+}
 }

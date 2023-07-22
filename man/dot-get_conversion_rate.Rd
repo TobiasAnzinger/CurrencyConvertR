@@ -21,5 +21,8 @@ This internal function retrieves the conversion rate from one currency to anothe
 If the base currency is not "EUR", the conversion rate is calculated using EUR as an intermediary.
 }
 \examples{
+\dontrun{
 .get_conversion_rate('EUR', 'USD', '2023-07-21')
+.get_conversion_rate('CAD', 'CHF', '2023-05-07')
+}
 }

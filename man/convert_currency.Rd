@@ -4,10 +4,10 @@
 \alias{convert_currency}
 \title{Convert currency}
 \usage{
-convert_currency(ammount = 1, from = "EUR", to = "USD", date = Sys.Date())
+convert_currency(amount = 1, from = "EUR", to = "USD", date = Sys.Date())
 }
 \arguments{
-\item{ammount}{The amount to convert. Default is 1.}
+\item{amount}{The amount to convert. Default is 1.}
 
 \item{from}{The currency to convert from. Default is "EUR".}
 
@@ -16,16 +16,19 @@ convert_currency(ammount = 1, from = "EUR", to = "USD", date = Sys.Date())
 \item{date}{The date for which conversion rates are required. Default is the current date.}
 }
 \value{
-Converted amount from 'from' currency to 'to' currency.
+Converted amount from 'from' currency to 'to' currency (numeric).
 }
 \description{
 This function converts an amount from one currency to another using a conversion rate from a specific date.
 It uses an environment to store conversion rates to avoid multiple requests for the same date.
 If the conversion rates for the date are not available in the environment, they are retrieved using .update_conversion_rates().
 }
-\details{
-The currency s should be
-}
 \examples{
-convert_currency(100, 'EUR', 'USD', '2023-07-21')
+\dontrun{
+convert_currency()
+convert_currency(to = 'CHF')
+convert_currency(amount = 100, from = 'USD', to = "CAD")
+convert_currency(amount = 123, from = 'EUR', to = 'USD', date = '2023-07-21')
+convert_currency(amount = 123, from = 'CHF', to = 'CAD', date = '2023-04-12')
+}
 }
