@@ -31,8 +31,8 @@ library(httr)
     parsed_data <- jsonlite::fromJSON(json_data)
     return(parsed_data)
   } else {
-    print("Failed to get conversion rates")
-    return(NULL)
+    stop("Failed to get conversion rates: maybe there is no data for the
+         requested date (the API only provides data back to 2000-01-01)")
   }
 }
 
